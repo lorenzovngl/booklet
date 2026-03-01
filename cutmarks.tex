@@ -1,0 +1,16 @@
+\usepackage{tikz}
+\usepackage{eso-pic}
+
+\AddToShipoutPicture{
+\begin{tikzpicture}[remember picture,overlay]
+
+% linea verticale centrale
+\draw[dashed,gray]
+(current page.north) -- (current page.south);
+
+% linea orizzontale centrale
+\draw[dashed,gray]
+(current page.west) -- (current page.east);
+
+\end{tikzpicture}
+}

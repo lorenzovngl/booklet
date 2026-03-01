@@ -1,0 +1,87 @@
+% header.tex — Pandoc/XeLaTeX header for A6 notes + ruby/furigana + TOC control
+% Copy this entire file as-is.
+
+% -----------------------------
+% Basics
+% -----------------------------
+\usepackage{geometry}
+\linespread{1.2}
+
+% -----------------------------
+% Japanese ruby (furigana)
+% -----------------------------
+\usepackage{ruby}
+\renewcommand{\rubysep}{0.2ex}
+
+% -----------------------------
+% Title page control (Pandoc uses \maketitle when title/author/date are set)
+% Goal: NO page number on cover
+% -----------------------------
+\usepackage{titling}
+
+% Put the title centered and make the title page style empty
+% (robust: does not depend on patching \maketitle internals)
+\pretitle{\begin{center}\thispagestyle{empty}\Huge\bfseries}
+\posttitle{\end{center}\vspace{8mm}}
+\preauthor{\begin{center}\Large}
+\postauthor{\end{center}\vspace{4mm}}
+\predate{\begin{center}\large}
+\postdate{\end{center}\vfill\newpage}
+
+% -----------------------------
+% TOC spacing and line height
+% -----------------------------
+\usepackage{tocloft}
+\usepackage{setspace}
+
+% spacing between TOC entries (tune for A6)
+\setlength{\cftbeforesecskip}{2pt}
+\setlength{\cftbeforesubsecskip}{1pt}
+
+% slightly tighter TOC leading
+\AtBeginDocument{
+  \addtocontents{toc}{\protect\setstretch{0.95}}
+}
+
+% -----------------------------
+% TOC pagination rules
+% - Start TOC on a new page
+% - TOC uses roman numerals
+% - After TOC: new page, arabic numerals, reset to 1
+% -----------------------------
+\usepackage{etoolbox}
+
+% Salva l'originale
+\let\origtableofcontents\tableofcontents
+
+% Wrapper: romani per il TOC, poi nuova pagina + arabi da 1
+\renewcommand{\tableofcontents}{%
+  \clearpage
+  \pagenumbering{roman}%
+  \origtableofcontents
+  \clearpage
+  \pagenumbering{arabic}%
+  \setcounter{page}{1}%
+}
+
+\pretocmd{\tableofcontents}{
+  \clearpage
+  \pagenumbering{roman}
+  \thispagestyle{empty} % optional: no page number on the first TOC page
+}{}{}
+
+\apptocmd{\tableofcontents}{
+  \clearpage
+  \pagenumbering{arabic}
+  \setcounter{page}{1}
+}{}{}
+
+% -----------------------------
+% Page number position (raise it a bit)
+% -----------------------------
+\setlength{\footskip}{-5mm}
+
+% -----------------------------
+% (Optional) If you want very clean pages (no headers), keep default plain style.
+% If later you want custom headers/footers, we can add fancyhdr here.
+% -----------------------------
